@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
-from flask_login import LoginManager, UserMixin, login_required, login_user
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, login_manager
 
 class Base(DeclarativeBase):
   pass
@@ -47,6 +47,10 @@ class Emprestimos(db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(Usuarios, int(user_id))
+
+login_manager.login_view = 'cadastro'
+
+login_manager.login_message = 'Por favor realize o login para acessar essa página'
 
 with app.app_context():
     db.create_all()
@@ -97,5 +101,8 @@ def login():
     return render_template('login.html')
 
 @app.route('/logout')
+@login_required
 def logout():
-    pass
+    logout_user()
+
+    return redirect(url_for('cadastro'))
