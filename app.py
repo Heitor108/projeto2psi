@@ -4,6 +4,7 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, login_manager
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class Base(DeclarativeBase):
   pass
@@ -65,10 +66,12 @@ def cadastro():
     if request.method == 'POST':
         usuario_existente = db.session.execute(db.select(Usuarios).filter_by(email=request.form.get('email'))).scalar()
 
+        senha = request.form.get('senha')
+
         novo_usuario = Usuarios(
         nome = request.form.get('nome'),
         email = request.form.get('email'),
-        senha = request.form.get('senha')
+        senha = generate_password_hash(senha)
         )
         
         if usuario_existente:
@@ -90,7 +93,7 @@ def login():
         nome = request.form.get('nome')
         senha = request.form.get('senha')
 
-        if usuario and usuario.nome == nome and usuario.senha == senha:
+        if usuario and usuario.nome == nome and check_password_hash(usuario.senha, senha):
             login_user(usuario)
 
         else:
