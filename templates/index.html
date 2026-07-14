@@ -9,5 +9,38 @@
 {% endblock %}
 
 {% block content %}
+    <h1>Olá {{ usuario.nome }}</h1>
+    
+    <a href="{{ url_for('livros') }}">Veja toda a biblioteca</a>
+    <a href="{{ url_for('novo_livro') }}">Doe um novo livro</a>
 
+    <h2>Livros doados por você:</h2>
+    {% if livros %}
+        {% for livro in livros %}
+            <ul>
+                <li>Título: {{ livro.titulo }}</li>
+                <li>Autor: {{ livro.autor }}</li>
+                <li>Ano: {{ livro.ano }}</li>
+                <li>Situação: {{ emprestimos.status }}</li>
+                <li>Categoria: {{ livro.categoria }}</li>
+                <li>Quantidade: {{ livro.quantidade }}</li>
+            </ul>
+            <a href="{{ url_for('editar' ) }}">Alguma informação está errada? Conserte aqui</a>
+            <a href="{{ url_for('excluir' ) }}">Deseja retirar o livro da biblioteca? Clique aqui</a>
+        {% endfor %}
+
+        {% else %}
+        <p>Você ainda não doou livros</p>
+    {% endif %}
+
+    <h2>Meus empréstimos</h2>
+    {% if emprestimos %}
+        {% for emprestimo in emprestimos %}
+            <p>Empréstimo nº {{ emprestimo.id }}</p>
+            <a href="{{ url_for('devolver' ) }}">Devolver</a>
+        {% endfor %}
+
+    {% else %}
+        <p>Você não possui empréstimos.</p>
+    {% endif %}
 {% endblock %}

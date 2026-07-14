@@ -15,7 +15,9 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('logout' ) }}">Logout</a>
+        <a href="{{ url_for('cadastro' ) }}">Faça o seu cadastro!</a>
+        <a href="{{ url_for('login' ) }}">Já é cadastrado? Faça o Login</a>
+        <a href="{{ url_for('logout' ) }}">Deseja sair? Faça o Logout</a>
     </header>
     {% block content %}
         

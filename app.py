@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
-from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, login_manager
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, login_manager, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class Base(DeclarativeBase):
@@ -33,6 +33,7 @@ class Livros(db.Model):
    titulo: Mapped[str] = mapped_column(nullable=False, unique=True)
    autor: Mapped[str] = mapped_column(nullable=False)
    ano: Mapped[int] = mapped_column(nullable=False)
+   emprestado: Mapped[bool] = mapped_column(default=False)
    categoria: Mapped[str] = mapped_column(nullable=False)
    quantidade: Mapped[int] = mapped_column(nullable=False)
    id_usuario: Mapped[int] = mapped_column(ForeignKey('usuarios.id'))
@@ -59,7 +60,12 @@ with app.app_context():
 @app.route('/')
 @login_required
 def index():
-    return render_template('index.html')
+    usuario = current_user
+
+    livros = db.session.execute(db.select(Livros).filter_by(id_usuario=usuario.id)).scalars()
+    emprestimos = db.session.execute(db.select(Emprestimos).filter_by(id_usuario=usuario.id)).scalars()
+
+    return render_template('index.html', usuario=usuario, livros=livros, emprestimos=emprestimos)
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
@@ -109,3 +115,10 @@ def logout():
     logout_user()
 
     return redirect(url_for('cadastro'))
+
+@app.route("/livros")
+@login_required
+def livros():
+    livros = db.session.execute(db.select(Livros)).scalars()
+
+    return render_template('livros.html', livros=livros)
