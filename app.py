@@ -33,7 +33,6 @@ class Livros(db.Model):
    titulo: Mapped[str] = mapped_column(nullable=False, unique=True)
    autor: Mapped[str] = mapped_column(nullable=False)
    ano: Mapped[int] = mapped_column(nullable=False)
-   emprestado: Mapped[bool] = mapped_column(default=False)
    categoria: Mapped[str] = mapped_column(nullable=False)
    quantidade: Mapped[int] = mapped_column(nullable=False)
    id_usuario: Mapped[int] = mapped_column(ForeignKey('usuarios.id'))
@@ -119,6 +118,45 @@ def logout():
 @app.route("/livros")
 @login_required
 def livros():
-    livros = db.session.execute(db.select(Livros)).scalars()
+    titulo = request.args.get('titulo')
+    categoria = request.args.get('categoria')
+    autor = request.args.get('autor')
+    ano = request.args.get('ano')
+
+    consulta = db.select(Livros)
+
+    if titulo:
+        consulta = consulta.where(Livros.titulo.contains(titulo))
+
+    if categoria:
+        consulta = consulta.where(Livros.categoria.contains(categoria))
+
+    if autor:
+        consulta = consulta.where(Livros.autor.contains(autor))
+
+    if ano:
+        consulta = consulta.where(Livros.ano == int(ano))
+
+    livros = db.session.execute(consulta).scalars()
 
     return render_template('livros.html', livros=livros)
+
+@app.route('/livro/novo')
+def novo_livro():
+    pass
+
+@app.route('/editar')
+def editar():
+    pass
+
+@app.route('/excluir')
+def excluir():
+    pass
+
+@app.route('/emprestar')
+def emprestar():
+    pass
+
+@app.route('/devolver')
+def devolver():
+    pass
