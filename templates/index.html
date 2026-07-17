@@ -21,12 +21,11 @@
                 <li>Título: {{ livro.titulo }}</li>
                 <li>Autor: {{ livro.autor }}</li>
                 <li>Ano: {{ livro.ano }}</li>
-                <li>Situação: {{ emprestimos.status }}</li>
                 <li>Categoria: {{ livro.categoria }}</li>
                 <li>Quantidade: {{ livro.quantidade }}</li>
             </ul>
-            <a href="{{ url_for('editar' ) }}">Alguma informação está errada? Conserte aqui</a>
-            <a href="{{ url_for('excluir' ) }}">Deseja retirar o livro da biblioteca? Clique aqui</a>
+            <a href="{{ url_for('editar', id=livro.id) }}">Alguma informação está errada? Conserte aqui</a>
+            <a href="{{ url_for('excluir', id=livro.id) }}">Deseja retirar o livro da biblioteca? Clique aqui</a>
         {% endfor %}
 
         {% else %}
@@ -37,7 +36,7 @@
     {% if emprestimos %}
         {% for emprestimo in emprestimos %}
             <p>Empréstimo nº {{ emprestimo.id }}</p>
-            <a href="{{ url_for('devolver' ) }}">Devolver</a>
+            <a href="{{ url_for('devolver', id=emprestimo.id) }}">Devolver</a>
         {% endfor %}
 
     {% else %}

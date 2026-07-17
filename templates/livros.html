@@ -40,8 +40,10 @@
                 Quantidade: {{ livro.quantidade }}
 
             </li>
-            {% if emprestimos.status == 'Disponível' %}
-                <a href="{{ url_for('emprestar' ) }}">Pegar livro emprestado</a>
+            {% if livro.quantidade > 0 %}
+                <a href="{{ url_for('emprestar', id=livro.id) }}">Pegar livro emprestado</a>
+            {% else %}
+                <p>Indisponível</p>
             {% endif %}
         {% endfor %}
     </ul>

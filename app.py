@@ -138,25 +138,120 @@ def livros():
         consulta = consulta.where(Livros.ano == int(ano))
 
     livros = db.session.execute(consulta).scalars()
+    emprestimos = db.session.execute(
+        db.select(Emprestimos).filter_by(id_usuario=current_user.id)
+    ).scalars().all()
 
-    return render_template('livros.html', livros=livros)
+    return render_template(
+        "livros.html",
+        livros=livros,
+        emprestimos=emprestimos
+    )
 
-@app.route('/livro/novo')
+@app.route('/livro/novo', methods=['GET', 'POST'])
+@login_required
 def novo_livro():
-    pass
+    if request.method == 'POST':
+        titulo = request.form.get('titulo')
 
-@app.route('/editar')
-def editar():
-    pass
+        livro = db.session.execute(
+            db.select(Livros).where(
+                Livros.titulo == titulo,
+                Livros.id_usuario == current_user.id
+            )
+        ).scalar()
 
-@app.route('/excluir')
-def excluir():
-    pass
+        if livro:
+            livro.quantidade += 1
+        else:
+            livro = Livros(
+                titulo=titulo,
+                autor=request.form.get('autor'),
+                ano=request.form.get('ano'),
+                categoria=request.form.get('categoria'),
+                quantidade=1,
+                id_usuario=current_user.id
+            )
+            db.session.add(livro)
 
-@app.route('/emprestar')
-def emprestar():
-    pass
+        db.session.commit()
 
-@app.route('/devolver')
-def devolver():
-    pass
+        return redirect(url_for('index'))
+
+    return render_template('novo_livro.html')
+
+@app.route('/livro/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editar(id):
+    livro = db.session.get(Livros, id)
+
+    if not livro or livro.id_usuario != current_user.id:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        livro.titulo = request.form.get('titulo')
+        livro.autor = request.form.get('autor')
+        livro.ano = request.form.get('ano')
+        livro.categoria = request.form.get('categoria')
+
+        db.session.commit()
+
+        return redirect(url_for('index'))
+
+    return render_template('editar.html', livro=livro)
+
+@app.route('/livro/excluir/<int:id>')
+@login_required
+def excluir(id):
+    livro = db.session.get(Livros, id)
+
+    if livro.quantidade > 1:
+        livro.quantidade -= 1
+    else:
+        db.session.delete(livro)
+
+    db.session.commit()
+
+    return redirect(url_for('index'))
+
+@app.route('/emprestar/<int:id>')
+@login_required
+def emprestar(id):
+    livro = db.session.get(Livros, id)
+
+    if not livro:
+        return redirect(url_for('livros'))
+
+    if livro.id_usuario == current_user.id:
+        return redirect(url_for('livros'))
+
+    if livro.quantidade > 0:
+        livro.quantidade -= 1
+
+        emprestimo = Emprestimos(
+            status='Emprestado',
+            id_usuario=current_user.id,
+            id_livro=livro.id
+        )
+
+        db.session.add(emprestimo)
+        db.session.commit()
+
+    return redirect(url_for('livros'))
+
+@app.route('/devolver/<int:id>')
+@login_required
+def devolver(id):
+    emprestimo = db.session.get(Emprestimos, id)
+
+    if not emprestimo:
+        return redirect(url_for('index'))
+
+    livro = db.session.get(Livros, emprestimo.id_livro)
+
+    livro.quantidade += 1
+
+    db.session.delete(emprestimo)
+    db.session.commit()
+
+    return redirect(url_for('index'))
