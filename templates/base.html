@@ -15,13 +15,20 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('index' ) }}">Volte para a sessão principal</a>
-        <a href="{{ url_for('cadastro' ) }}">Faça o seu cadastro!</a>
-        <a href="{{ url_for('login' ) }}">Já é cadastrado? Faça o Login</a>
-        <a href="{{ url_for('logout' ) }}">Deseja sair? Faça o Logout</a>
+        <div class="header-brand">
+            <a href="{{ url_for('index') }}">Biblioteca</a>
+        </div>
+        <button class="nav-toggle" type="button" aria-label="Abrir menu">☰</button>
+        <nav class="nav-links">
+            <a href="{{ url_for('index' ) }}">Sessão principal</a>
+            <a href="{{ url_for('cadastro' ) }}">Cadastro</a>
+            <a href="{{ url_for('login' ) }}">Login</a>
+            <a href="{{ url_for('logout' ) }}">Logout</a>
+        </nav>
     </header>
     {% block content %}
         
     {% endblock %}
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
 </body>
 </html>

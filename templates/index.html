@@ -25,7 +25,7 @@
                 <li>Quantidade: {{ livro.quantidade }}</li>
             </ul>
             <a href="{{ url_for('editar', id=livro.id) }}">Alguma informação está errada? Conserte aqui</a>
-            <a href="{{ url_for('excluir', id=livro.id) }}">Deseja retirar o livro da biblioteca? Clique aqui</a>
+            <a href="{{ url_for('excluir', id=livro.id) }}" data-confirm="Tem certeza que deseja retirar esse livro da biblioteca?">Deseja retirar o livro da biblioteca? Clique aqui</a>
         {% endfor %}
 
         {% else %}
@@ -36,7 +36,7 @@
     {% if emprestimos %}
         {% for emprestimo in emprestimos %}
             <p>Empréstimo nº {{ emprestimo.id }}</p>
-            <a href="{{ url_for('devolver', id=emprestimo.id) }}">Devolver</a>
+            <a href="{{ url_for('devolver', id=emprestimo.id) }}" data-confirm="Você tem certeza que quer devolver esse empréstimo?">Devolver</a>
         {% endfor %}
 
     {% else %}
