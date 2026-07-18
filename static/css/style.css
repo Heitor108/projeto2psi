@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -164,4 +165,163 @@ section {
 
 p {
     color: #555;
+}
+
+
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    header {
+        padding: 12px 15px;
+        margin-bottom: 20px;
+    }
+
+    header a {
+        margin-right: 12px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        padding: 6px 10px;
+        display: inline-block;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 12px;
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-top: 20px;
+        margin-bottom: 12px;
+    }
+
+    form {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"] {
+        padding: 8px;
+        margin-bottom: 12px;
+        font-size: 13px;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    li {
+        padding: 12px;
+        margin-bottom: 8px;
+        border-left-width: 3px;
+    }
+
+    li a {
+        display: block;
+        margin-bottom: 8px;
+        width: 100%;
+        text-align: center;
+        margin-right: 0;
+        margin-top: 8px;
+    }
+
+    main,
+    section {
+        padding: 0 15px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    body {
+        font-size: 13px;
+    }
+
+    header {
+        padding: 10px 12px;
+        margin-bottom: 15px;
+    }
+
+    header a {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 6px;
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        font-size: 15px;
+        margin-top: 15px;
+        margin-bottom: 10px;
+    }
+
+    form {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    label {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"] {
+        padding: 8px;
+        margin-bottom: 10px;
+        font-size: 12px;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    li {
+        padding: 10px;
+        margin-bottom: 6px;
+    }
+
+    li p {
+        font-size: 12px;
+    }
+
+    li a {
+        padding: 5px 8px;
+        font-size: 11px;
+        margin-bottom: 6px;
+    }
+
+    main,
+    section {
+        padding: 0 12px;
+    }
+
+    a {
+        font-size: 13px;
+    }
+}
+
+
+@media (min-width: 1024px) {
+    main,
+    section {
+        max-width: 1000px;
+    }
 }
